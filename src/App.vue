@@ -41,7 +41,7 @@ export default {
     Table
   },
   mounted() {
-    this.getUsers();
+    // this.getUsers();
   },
   computed: {
     usersModified() {
@@ -77,6 +77,7 @@ export default {
       this.isModalVisible = true;
     },
     showUsersTable() {
+      this.getUsers();
       this.isUsersTableVisible = true;
     }    
   }
