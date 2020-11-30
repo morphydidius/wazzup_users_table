@@ -1,5 +1,6 @@
 <template>
   <div class="users-table">
+    <DispatchForm @send="setFilter" />
     <table border="1" cellspacing="0" cellpadding="0">
       <tr>
         <th
@@ -23,7 +24,7 @@
         </th>
       </tr>
       <tr
-        v-for="(line, ind) in sortedContent"
+        v-for="(line, ind) in resultContent"
         :key="ind"
         class="users-table__line"
         @click="clickOnLine(line)"
@@ -41,11 +42,24 @@ export default {
   data() {
     return {
       arrowsVisibleIndex: -1,
+      filterWord: '',
       sortParams: [],
       sortedContent: []
     }
   },
-  computed: {},
+  computed: {
+    resultContent() {
+      return this.filterWord.length
+        ? this.sortedContent.filter((line) => {
+          return line.some((elem) => {
+            const currentElem = elem.toLowerCase();
+            const filterWord = this.filterWord.toLowerCase();
+            return currentElem.match(filterWord);
+          });
+        })
+        : this.sortedContent;
+    }
+  },
   mounted() {},
   methods: {
     clickOnLine(line) {
@@ -62,6 +76,9 @@ export default {
         index: index,
         sortType: null
       }));
+    },
+    setFilter(word) {
+      this.filterWord = word ? word : '';
     },
     setSortParam(index) {
       this.sortParams = this.sortParams.map((param) => {
@@ -127,11 +144,14 @@ export default {
 
 <style lang="scss" scoped>
 .users-table {
+  max-width: 900px;
+  width: 100%;
+  margin: 20px auto;
+
   table {
     font: 16px/24px 'Arial';
     width: 100%;
-    max-width: 900px;
-    margin: 20px auto;
+    margin-top: 20px;
 
     th, td {
       padding: 6px;
