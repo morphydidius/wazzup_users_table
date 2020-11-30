@@ -24,30 +24,66 @@
         </th>
       </tr>
       <tr
-        v-for="(line, ind) in resultContent"
+        v-for="(line, ind) in resultPageContent"
         :key="ind"
         class="users-table__line"
         @click="clickOnLine(line)"
       >
         <td v-for="(cell, i) in line" :key="i">{{ cell }}</td>
       </tr>
+      <span @click="goToPrevPage">Назад</span>
+      {{pageIndexes.min}} {{ currentPageIndex }} {{pageIndexes.max}}
+      <span @click="goToNextPage">Вперед</span>
+      <div>{{resultContent.length}}</div>
+      <!-- <TablePage :itemsPerPage="10" :content="resultContent" /> -->
     </table>
   </div>
 </template>
 
 <script>
+// import TablePage from './table_page';
 export default {
   name: 'UsersTable',
-  props: ['content', 'tableHeaderContent'],
+  props: {
+    content: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    itemsPerPage: {
+      type: Number,
+      default() {
+        return 10;
+      }
+    },
+    tableHeaderContent: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
+  },
+  components: {
+    // TablePage
+  },
   data() {
     return {
       arrowsVisibleIndex: -1,
+      currentPageIndex: 1,
       filterWord: '',
       sortParams: [],
       sortedContent: []
     }
   },
   computed: {
+    pageIndexes() {
+      return {
+        min: 1,
+        max: Math.round(this.resultContent.length / this.itemsPerPage),
+        current: this.currentPageIndex
+      };
+    },
     resultContent() {
       return this.filterWord.length
         ? this.sortedContent.filter((line) => {
@@ -58,6 +94,9 @@ export default {
           });
         })
         : this.sortedContent;
+    },
+    resultPageContent() {
+      return this.resultContent.filter((item, index) => this.setIndexesOnPage(item, index));
     }
   },
   mounted() {},
@@ -65,11 +104,20 @@ export default {
     clickOnLine(line) {
       this.$emit('click-on-line', line);
     },
+    setIndexesOnPage(item, index) {
+      return index <= this.itemsPerPage * this.currentPageIndex && index > this.itemsPerPage * this.currentPageIndex - this.itemsPerPage;
+    },
     hideSort() {
       this.arrowsVisibleIndex = -1;
     },
     getArrowMode(index, type) {
       return this.arrowsVisibleIndex === index || this.sortParams[index] && this.sortParams[index].sortType === type;
+    },
+    goToPrevPage() {
+      this.currentPageIndex -= 1;
+    },
+    goToNextPage() {
+      this.currentPageIndex += 1;
     },
     initSortParams() {
       this.sortParams = this.tableHeaderContent.map((headerItem, index) => ({
