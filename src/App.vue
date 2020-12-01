@@ -11,7 +11,7 @@
     :tableHeaderContent="usersTableHeaders"
     @clickOnLine="handleLineClick"
   />
-  <Modal
+  <ModalCompo
     v-if="isModalVisible"
     :content="modalContent"
     @close="closeModal"
@@ -40,9 +40,7 @@ export default {
   components: {
     Table
   },
-  mounted() {
-    // this.getUsers();
-  },
+  mounted() {},
   computed: {
     usersModified() {
       return this.users.map((user) => ([
@@ -90,5 +88,14 @@ button {
   display: block;
   background-color: #fff;
   font: 16px/24px 'Arial';
+  transition: all .2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(204, 131, 20, .5);
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 12px;
+  }
 }
 </style>

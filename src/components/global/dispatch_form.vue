@@ -42,12 +42,26 @@ export default {
   input[type="text"] {
     padding: 6px;
     margin-right: 20px;
+
+    @media (max-width: 1000px) {
+      font-size: 12px;
+    }
   }
 
   button {
     padding: 2px;
     font: 16px/24px 'Arial';
     min-width: 80px;
+    background-color: #fff;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      background-color: rgba(204, 131, 20, .5);
+    }
+
+    @media (max-width: 1000px) {
+      font-size: 12px;
+    }
 
     &:not(:last-of-type) {
       margin-right: 20px;

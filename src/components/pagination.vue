@@ -3,8 +3,8 @@
     <div class="pagination__firstpage" @click="goToFirst" :disabled="isFirstPage">First</div>
     <div class="pagination__back" @click="goToPrev" :disabled="isFirstPage"></div>
     <div class="pagination__current">{{ currentPage }}</div>
-    <div class="pagination__next" @click="goToNext" :disabled="isLastPage"></div>
-    <div class="pagination__lastpage" @click="goToLast" :disabled="isLastPage">Last</div>
+    <div class="pagination__next" @click="goToNext" :disabled="isLastPage || !pagesTotal"></div>
+    <div class="pagination__lastpage" @click="goToLast" :disabled="isLastPage || !pagesTotal">Last</div>
   </div>
 </template>
 
@@ -45,10 +45,14 @@ export default {
       }
     },
     goToFirst() {
-      this.$emit('go-to-first');
+      if (this.pagesTotal) {
+        this.$emit('go-to-first');
+      }
     },
     goToLast() {
-      this.$emit('go-to-last');
+      if (this.pagesTotal) {
+        this.$emit('go-to-last');
+      }
     }
   }
 }
@@ -105,7 +109,16 @@ export default {
 
   &__back[disabled=true], &__next[disabled=true],
   &__firstpage[disabled=true], &__lastpage[disabled=true] {
-    opacity: 0;
+    opacity: 0.2;
+    cursor: default;
+  }
+
+  &__back[disabled=true]:hover {
+    border-color: transparent #cccaca transparent transparent;
+  }
+
+  &__next[disabled=true]:hover {
+    border-color: transparent transparent transparent #cccaca;
   }
 }
 </style>

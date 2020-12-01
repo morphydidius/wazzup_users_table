@@ -83,7 +83,7 @@ export default {
     pageIndexes() {
       return {
         min: 1,
-        max: Math.round(this.resultContent.length / this.itemsPerPage),
+        max: Math.ceil(this.resultContent.length / this.itemsPerPage),
         current: this.currentPageIndex
       };
     },
@@ -136,6 +136,7 @@ export default {
     },
     setFilter(word) {
       this.filterWord = word ? word : '';
+      this.goToFirstPage();
     },
     setSortParam(index) {
       this.sortParams = this.sortParams.map((param) => {
@@ -210,9 +211,16 @@ export default {
     width: 100%;
     margin-top: 20px;
 
+    @media (max-width: 1000px) {
+      font-size: 12px;
+    }
+
     th, td {
       padding: 6px;
-      min-width: 150px;
+
+      @media (min-width: 1000px) {
+        min-width: 150px;
+      }
     }
 
     th {

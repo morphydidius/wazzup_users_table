@@ -1,24 +1,22 @@
 <template>
-  <transition name="fade">
-    <div class="modal">
-      <div ref="overlay" class="modal__overlay" @click="checkClosing">
-        <div class="modal__window">
-          <div
-            ref="btn-close"
-            class="modal__window__close"
-            @click="checkClosing"
-          ></div>
-          <div class="modal__window__param"><span>Имя:</span> {{ content.name }}</div>
-          <div class="modal__window__param"><span>E-mail:</span> {{ content.email }}</div>
-        </div>
+  <div class="modal">
+    <div ref="overlay" class="modal__overlay" @click="checkClosing">
+      <div class="modal__window">
+        <div
+          ref="btn-close"
+          class="modal__window__close"
+          @click="checkClosing"
+        ></div>
+        <div class="modal__window__param"><span>Имя:</span> {{ content.name }}</div>
+        <div class="modal__window__param"><span>E-mail:</span> {{ content.email }}</div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Modal',
+  name: 'ModalCompo',
   props: ['content'],
   data() {
     return {
