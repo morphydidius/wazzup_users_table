@@ -31,17 +31,20 @@
       >
         <td v-for="(cell, i) in line" :key="i">{{ cell }}</td>
       </tr>
-      <span @click="goToPrevPage">Назад</span>
-      {{pageIndexes.min}} {{ currentPageIndex }} {{pageIndexes.max}}
-      <span @click="goToNextPage">Вперед</span>
-      <div>{{resultContent.length}}</div>
-      <!-- <TablePage :itemsPerPage="10" :content="resultContent" /> -->
     </table>
+    <Pagination
+      :currentPage="currentPageIndex"
+      :pagesTotal="pageIndexes.max"
+      @go-to-prev="goToPrevPage"
+      @go-to-next="goToNextPage"
+      @go-to-first="goToFirstPage"
+      @go-to-last="goToLastPage"
+    />
   </div>
 </template>
 
 <script>
-// import TablePage from './table_page';
+import Pagination from './pagination';
 export default {
   name: 'UsersTable',
   props: {
@@ -65,7 +68,7 @@ export default {
     }
   },
   components: {
-    // TablePage
+    Pagination
   },
   data() {
     return {
@@ -105,7 +108,7 @@ export default {
       this.$emit('click-on-line', line);
     },
     setIndexesOnPage(item, index) {
-      return index <= this.itemsPerPage * this.currentPageIndex && index > this.itemsPerPage * this.currentPageIndex - this.itemsPerPage;
+      return index + 1 <= this.itemsPerPage * this.currentPageIndex && index + 1 > this.itemsPerPage * this.currentPageIndex - this.itemsPerPage;
     },
     hideSort() {
       this.arrowsVisibleIndex = -1;
@@ -118,6 +121,12 @@ export default {
     },
     goToNextPage() {
       this.currentPageIndex += 1;
+    },
+    goToFirstPage() {
+      this.currentPageIndex = 1;
+    },
+    goToLastPage() {
+      this.currentPageIndex = this.pageIndexes.max;
     },
     initSortParams() {
       this.sortParams = this.tableHeaderContent.map((headerItem, index) => ({
