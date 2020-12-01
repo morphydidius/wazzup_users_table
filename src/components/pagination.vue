@@ -2,7 +2,7 @@
   <div class="pagination">
     <div class="pagination__firstpage" @click="goToFirst" :disabled="isFirstPage">First</div>
     <div class="pagination__back" @click="goToPrev" :disabled="isFirstPage"></div>
-    <div class="pagination__current">{{ currentPage }}</div>
+    <div class="pagination__current">{{ currentPage }} / {{ pagesTotal }}</div>
     <div class="pagination__next" @click="goToNext" :disabled="isLastPage || !pagesTotal"></div>
     <div class="pagination__lastpage" @click="goToLast" :disabled="isLastPage || !pagesTotal">Last</div>
   </div>

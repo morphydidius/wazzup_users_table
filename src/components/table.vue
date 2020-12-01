@@ -102,7 +102,10 @@ export default {
       return this.resultContent.filter((item, index) => this.setIndexesOnPage(item, index));
     }
   },
-  mounted() {},
+  mounted() {
+    this.initSortParams();
+    this.sortedContent = this.content;
+  },
   methods: {
     clickOnLine(line) {
       this.$emit('click-on-line', line);
@@ -163,12 +166,6 @@ export default {
     }
   },
   watch: {
-    'content.length'(value) {
-      if (value) {
-        this.initSortParams();
-        this.sortedContent = this.content;
-      }
-    },
     sortParams() {
       this.sortedContent = this.sortParams.reduce((acc, param) => {
         if (param.sortType === 'ascend') {

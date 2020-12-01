@@ -5,6 +5,9 @@
   >
     Показать пользователей
   </button>
+  <div v-if="isErrorCatched" class="error">
+    Ошибка загрузки :(
+  </div>
   <Table
     v-if="isUsersTableVisible"
     :content="usersModified"
@@ -25,6 +28,7 @@ export default {
   name: 'App',
   data() {
     return {
+      isErrorCatched: false,
       isModalVisible: false,
       isUsersTableVisible: false,
       modalContent: {},
@@ -43,15 +47,21 @@ export default {
   mounted() {},
   computed: {
     usersModified() {
-      return this.users.map((user) => ([
-        user.name,
-        user.company,
-        user.email,
-        user.add.state
-      ]));
+      if (this.users && this.users.length) {
+        return this.users.map((user) => ([
+          user.name,
+          user.company,
+          user.email,
+          user.add.state
+        ]));
+      }
+      return [];
     }
   },
   methods: {
+    openTable() {
+      this.isUsersTableVisible = true;
+    },
     closeModal() {
       this.isModalVisible = false;
     },
@@ -59,7 +69,11 @@ export default {
       return fullName.split(' ')[1];
     },
     async getUsers() {
-      this.users = await fetch('https://app.dev-wazzup24.com/api/v1/wazzup_test/').then((result) => result.json());
+      await fetch('https://app.dev-wazzup24.com/api/v1/wazzup_test/')
+        .then((result) => result.json() )
+        .then((data) => { this.users = data })
+        .then(() => { this.openTable() })
+        .catch(() => this.isErrorCatched = true );
     },
     handleLineClick(line) {
       this.setModalContent(line);
@@ -76,7 +90,6 @@ export default {
     },
     showUsersTable() {
       this.getUsers();
-      this.isUsersTableVisible = true;
     }    
   }
 }
@@ -97,5 +110,10 @@ button {
   @media (max-width: 1000px) {
     font-size: 12px;
   }
+}
+
+.error {
+  text-align: center;
+  font: 16px/24px 'Arial';
 }
 </style>
